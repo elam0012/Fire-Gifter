@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Fire-Gifter</title>
     <script src="./bundle.js" type="module"></script>
     <link rel="stylesheet" href="./main.css" />
   </head>
+
   <body>
+
     <header>
       <h1>Fire-Giftr</h1>
       <h2>All Gifts Must Go!</h2>
     </header>
+
     <main>
+
       <section class="people">
         <h2>People <button id="btnAddPerson">Add Person</button></h2>
         <ul class="person-list">
@@ -31,6 +36,7 @@
           </li>
         </ul>
       </section>
+
       <section class="ideas">
         <h2>Ideas <button id="btnAddIdea">Add Idea</button></h2>
         <ul class="idea-list">
@@ -43,8 +49,11 @@
           </li>
         </ul>
       </section>
+      
     </main>
+
     <section class="overlay active">
+
       <dialog id="dlgPerson" class="">
         <h2>Add Person</h2>
         <p>
@@ -76,6 +85,7 @@
           <button id="btnSavePerson">Save</button>
         </p>
       </dialog>
+
       <dialog id="dlgIdea" class="active">
         <h2>Add Gift Idea</h2>
         <p>
@@ -101,6 +111,8 @@
           <button id="btnSaveIdea">Save</button>
         </p>
       </dialog>
+      
     </section>
+
   </body>
 </html>
