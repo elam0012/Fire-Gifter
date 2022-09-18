@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
   "keywords": [],
-  "author": "Steve <steve@home.org>",
+  "author": "Yasir Elamin <ela0012@algonquinlive.com>",
   "license": "MIT",
   "dependencies": {
     "firebase": "^9.9.3",
