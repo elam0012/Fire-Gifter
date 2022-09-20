@@ -57,6 +57,11 @@ async function getPeople(){
   buildPeople(people);
   document.querySelector('.person').classList.add('selected')
   getIdeas(people[0].id)
+  document.querySelectorAll('.person').forEach((person) => {
+        person.addEventListener('click', (ev) => {
+            selectPerson(ev)
+        })
+    });
 }
 
 const gifts = []; //to hold all the gifts from the collection
@@ -109,4 +114,11 @@ function buildGifts(gifts){
             <p class="location">${gift.location}</p>
           </li>`
   }).join('');
+}
+
+function selectPerson (ev) {
+  ev.path[1].classList.add("selected")
+  document.querySelectorAll('.person').forEach((person) => {
+    if (person != ev.path[1]) person.classList.remove("selected")
+  });
 }
