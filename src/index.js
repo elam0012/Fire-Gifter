@@ -52,10 +52,11 @@ async function getPeople(){
     const data = doc.data();
     const id = doc.id;
     people.push({id, ...data});
-    getIdeas(id)
+    // getIdeas(id)
   });
   buildPeople(people);
   document.querySelector('.person').classList.add('selected')
+  getIdeas(people[0].id)
 }
 
 const gifts = []; //to hold all the gifts from the collection
