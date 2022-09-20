@@ -16,7 +16,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
-  //set up the dom events
   getPeople()
   document.getElementById('btnCancelPerson').addEventListener('click', hideOverlay);
   document.getElementById('btnCancelIdea').addEventListener('click', hideOverlay);
@@ -43,16 +42,11 @@ function showOverlay(ev) {
 const people = []; //to hold all the people from the collection
 
 async function getPeople(){
-  //call this from DOMContentLoaded init function 
-  //the db variable is the one created by the getFirestore(app) call.
   const querySnapshot = await getDocs(collection(db, 'people'));
   querySnapshot.forEach((doc) => {
-    //every `doc` object has a `id` property that holds the `_id` value from Firestore.
-    //every `doc` object has a doc() method that gives you a JS object with all the properties
-    const data = doc.data();
-    const id = doc.id;
+    const data = doc.data(); // to hold all teh document data not including the id
+    const id = doc.id; //every `doc` object has a `id` property that holds the `_id` value from Firestore.
     people.push({id, ...data});
-    // getIdeas(id)
   });
   buildPeople(people);
   document.querySelector('.person').classList.add('selected')
@@ -64,21 +58,19 @@ async function getPeople(){
     });
 }
 
-const gifts = []; //to hold all the gifts from the collection
-
 async function getIdeas(id){
+  console.log(id) // this proves all ids are sent correctly
+  const gifts = []; //to hold all the gifts from the collection and to clear teh previous gifts
   //get an actual reference to the person document 
   const personRef = doc(collection(db, 'people'), id);
   //then run a query where the `person-id` property matches the reference for the person
   const docs = query(
     collection(db, 'gift-ideas'),
-    where('location', '==', "Ottawa") // this one works if replace with the next line will not work
-    // where('person-id', '==', personRef)
+    where('person-id', '==', personRef)
   );
   const querySnapshot = await getDocs(docs);
 
   querySnapshot.forEach((doc) => { 
-    //work with the resulting docs
     const data = doc.data();
     const id = doc.id;
     gifts.push({id, ...data});
