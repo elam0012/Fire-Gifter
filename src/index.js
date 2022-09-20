@@ -121,4 +121,5 @@ function selectPerson (ev) {
   document.querySelectorAll('.person').forEach((person) => {
     if (person != ev.path[1]) person.classList.remove("selected")
   });
+  getIdeas(ev.path[1].dataset.id)
 }
