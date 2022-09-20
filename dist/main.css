@@ -91,7 +91,7 @@ ul {
   font-size: 0.8rem;
   line-height: 1rem;
   font-weight: 100;
-  color: #777;
+  color: var(--dark-purple);
 }
 
 .idea-list li.idea {

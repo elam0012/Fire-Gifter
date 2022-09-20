@@ -9,7 +9,6 @@ const firebaseConfig = {
   messagingSenderId: "1082424702054",
   appId: "1:1082424702054:web:85bda4155ca7159e8d69a7"
 };
-//TODO: replace this config object with your own
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -19,17 +18,10 @@ const db = getFirestore(app);
 document.addEventListener('DOMContentLoaded', () => {
   //set up the dom events
   getPeople()
-  document
-    .getElementById('btnCancelPerson')
-    .addEventListener('click', hideOverlay);
-  document
-    .getElementById('btnCancelIdea')
-    .addEventListener('click', hideOverlay);
+  document.getElementById('btnCancelPerson').addEventListener('click', hideOverlay);
+  document.getElementById('btnCancelIdea').addEventListener('click', hideOverlay);
   document.querySelector('.overlay').addEventListener('click', hideOverlay);
-
-  document
-    .getElementById('btnAddPerson')
-    .addEventListener('click', showOverlay);
+  document.getElementById('btnAddPerson').addEventListener('click', showOverlay);
   document.getElementById('btnAddIdea').addEventListener('click', showOverlay);
 });
 
@@ -63,6 +55,7 @@ async function getPeople(){
     getIdeas(id)
   });
   buildPeople(people);
+  document.querySelector('.person').classList.add('selected')
 }
 
 const gifts = []; //to hold all the gifts from the collection
