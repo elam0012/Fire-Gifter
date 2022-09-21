@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDocs, query, where, addDoc} from 'firebase/firestore';
+let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuzvlK2q939LGuhDXP2cLyxDqW81uQE9M",
@@ -82,7 +83,6 @@ async function getIdeas(id){
 function buildPeople(people){
   //build the HTML
   let ul = document.querySelector('ul.person-list');
-  let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   //replace the old ul contents with the new.
   ul.innerHTML = people.map(person=>{
     const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
@@ -134,6 +134,8 @@ async function savePerson(ev){
   try {
     const docRef = await addDoc(collection(db, 'people'), person );
     console.log('Document written with ID: ', docRef.id);
+    //0. add id to the person object
+    person.id = docRef.id
     //1. clear the form fields 
     document.getElementById('name').value = '';
     document.getElementById('month').value = '';
@@ -144,10 +146,33 @@ async function savePerson(ev){
     // tellUser(`Person ${name} added to database`);
     // person.id = docRef.id;
     //4. ADD the new HTML to the <ul> using the new object
-    // showPerson(person);
+    showPerson(person);
   } catch (err) {
     console.error('Error adding document: ', err);
     //do you want to stay on the dialog?
     //display a mesage to the user about the problem
+  }
+}
+
+function showPerson(person){
+  let li = document.getElementById(person.id);
+  if(li){
+    //update on screen
+    const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
+    //Use the number of the birth-month less 1 as the index for the months array
+    //replace the existing li with this new HTML
+    li.outerHTML = `<li data-id="${person.id}" class="person">
+            <p class="name">${person.name}</p>
+            <p class="dob">${dob}</p>
+          </li>`;
+  }else{
+    //add to screen
+    const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
+    //Use the number of the birth-month less 1 as the index for the months array
+    li = `<li data-id="${person.id}" class="person">
+            <p class="name">${person.name}</p>
+            <p class="dob">${dob}</p>
+          </li>`;
+    document.querySelector('ul.person-list').innerHTML += li;
   }
 }
