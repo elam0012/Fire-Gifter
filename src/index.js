@@ -130,7 +130,7 @@ async function savePerson(ev){
     'birth-month': month,
     'birth-day': day
   };
-  console.log(person)
+  
   try {
     const docRef = await addDoc(collection(db, 'people'), person );
     console.log('Document written with ID: ', docRef.id);
@@ -139,12 +139,12 @@ async function savePerson(ev){
     document.getElementById('month').value = '';
     document.getElementById('day').value = '';
     //2. hide the dialog and the overlay
-    hideOverlay();
+    hideOverlay(ev);
     //3. display a message to the user about success 
-    tellUser(`Person ${name} added to database`);
-    person.id = docRef.id;
+    // tellUser(`Person ${name} added to database`);
+    // person.id = docRef.id;
     //4. ADD the new HTML to the <ul> using the new object
-    showPerson(person);
+    // showPerson(person);
   } catch (err) {
     console.error('Error adding document: ', err);
     //do you want to stay on the dialog?
