@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDocs, query, where} from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs, query, where, addDoc} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuzvlK2q939LGuhDXP2cLyxDqW81uQE9M",
@@ -19,18 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
   getPeople()
   document.getElementById('btnCancelPerson').addEventListener('click', hideOverlay);
   document.getElementById('btnCancelIdea').addEventListener('click', hideOverlay);
-  document.querySelector('.overlay').addEventListener('click', hideOverlay);
+  // document.querySelector('.overlay').addEventListener('click', hideOverlay);
   document.getElementById('btnAddPerson').addEventListener('click', showOverlay);
   document.getElementById('btnAddIdea').addEventListener('click', showOverlay);
+  document.getElementById('btnSavePerson').addEventListener('click',savePerson)
 });
 
 function hideOverlay(ev) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.remove('active');
   document
-    .querySelectorAll('.overlay dialog')
-    .forEach((dialog) => dialog.classList.remove('active'));
+  .querySelectorAll('.overlay dialog')
+  .forEach((dialog) => dialog.classList.remove('active'));
 }
+
 function showOverlay(ev) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.add('active');
@@ -115,4 +117,37 @@ function selectPerson (ev) {
     if (person != ev.path[1]) person.classList.remove("selected")
   });
   getIdeas(ev.path[1].dataset.id)
+}
+
+async function savePerson(ev){
+  ev.preventDefault();
+  let name = document.getElementById('name').value;
+  let month = document.getElementById('month').value;
+  let day = document.getElementById('day').value;
+  if(!name || !month || !day) return; //form needs more info 
+  const person = {
+    name,
+    'birth-month': month,
+    'birth-day': day
+  };
+  console.log(person)
+  try {
+    const docRef = await addDoc(collection(db, 'people'), person );
+    console.log('Document written with ID: ', docRef.id);
+    //1. clear the form fields 
+    document.getElementById('name').value = '';
+    document.getElementById('month').value = '';
+    document.getElementById('day').value = '';
+    //2. hide the dialog and the overlay
+    hideOverlay();
+    //3. display a message to the user about success 
+    tellUser(`Person ${name} added to database`);
+    person.id = docRef.id;
+    //4. ADD the new HTML to the <ul> using the new object
+    showPerson(person);
+  } catch (err) {
+    console.error('Error adding document: ', err);
+    //do you want to stay on the dialog?
+    //display a mesage to the user about the problem
+  }
 }
