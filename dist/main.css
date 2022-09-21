@@ -204,3 +204,8 @@ dialog button {
 :is(dialog, h2) button:active {
   background-color: var(--light-purple);
 }
+.no-idea {
+  color: #e566f9;
+  padding-top: 3rem;
+  text-align: center;
+}

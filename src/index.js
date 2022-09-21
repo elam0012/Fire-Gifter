@@ -96,15 +96,17 @@ function buildGifts(gifts){
   //build the HTML
   let ul = document.querySelector('ul.idea-list');
   //replace the old ul contents with the new.
-  ul.innerHTML = gifts.map(gift => {
-    return `<li class="idea" data-id="${gift.id}">
-            <label for="chk-uniqueid"
-              ><input type="checkbox" id="chk-uniqueid" /> Bought</label
-            >
-            <p class="title">${gift.idea}</p>
-            <p class="location">${gift.location}</p>
-          </li>`
-  }).join('');
+  if (gifts.length != 0) {
+    ul.innerHTML = gifts.map(gift => {
+      return `<li class="idea" data-id="${gift.id}">
+      <label for="chk-uniqueid"
+      ><input type="checkbox" id="chk-uniqueid" /> Bought</label
+      >
+      <p class="title">${gift.idea}</p>
+      <p class="location">${gift.location}</p>
+      </li>`
+    }).join('');
+  } else ul.innerHTML = `<h3 class="no-idea">There are no ideas added! click on "Add Idea" button to add one</h3>`
 }
 
 function selectPerson (ev) {
