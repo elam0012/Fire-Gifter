@@ -59,10 +59,9 @@ async function getPeople(){
 }
 
 async function getIdeas(id){
-  console.log(id) // this proves all ids are sent correctly
   const gifts = []; //to hold all the gifts from the collection and to clear teh previous gifts
   //get an actual reference to the person document 
-  const personRef = doc(collection(db, 'people'), id);
+  const personRef = doc(db, 'people', id);
   //then run a query where the `person-id` property matches the reference for the person
   const docs = query(
     collection(db, 'gift-ideas'),
