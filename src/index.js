@@ -156,6 +156,7 @@ async function savePerson(ev){
 
 function showPerson(person){
   let li = document.getElementById(person.id);
+  // let li = document.querySelector(`[data-id=${person.id}]`)
   if(li){
     //update on screen
     const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
@@ -175,4 +176,15 @@ function showPerson(person){
           </li>`;
     document.querySelector('ul.person-list').innerHTML += li;
   }
+  document.querySelectorAll('.person').forEach((person) => {
+    person.classList.remove("selected")
+  });
+  
+  document.querySelector(`[data-id=${person.id}]`).classList.add('selected')
+  getIdeas(person.id)
+  document.querySelectorAll('.person').forEach((person) => {
+        person.addEventListener('click', (ev) => {
+            selectPerson(ev)
+        })
+    });
 }
