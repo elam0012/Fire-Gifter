@@ -209,3 +209,6 @@ dialog button {
   padding-top: 3rem;
   text-align: center;
 }
+.hide{
+  display: none;
+}

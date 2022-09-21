@@ -237,6 +237,7 @@ function showIdea(idea){
       </li>`
   }else{
     //add to screen
+    document.querySelector(".no-idea").classList.add("hide")
     li = `<li class="idea" data-id="${idea.id}">
       <label for="chk-uniqueid">
       <input type="checkbox" id="chk-uniqueid" /> Bought</label>
