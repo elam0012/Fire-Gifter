@@ -217,10 +217,38 @@ async function saveIdea(ev){
     // tellUser(`Person ${name} added to database`);
     // person.id = docRef.id;
     //4. ADD the new HTML to the <ul> using the new object
-    // showIdea(idea);
+    showIdea(idea);
   } catch (err) {
     console.error('Error adding document: ', err);
     //do you want to stay on the dialog?
     //display a mesage to the user about the problem
   }
+}
+
+function showIdea(idea){
+  let li = document.getElementById(idea.id);
+  // let li = document.querySelector(`[data-id=${person.id}]`)
+  if(li){
+    li.outerHTML = `<li class="idea" data-id="${idea.id}">
+      <label for="chk-uniqueid">
+      <input type="checkbox" id="chk-uniqueid" /> Bought</label>
+      <p class="title">${idea.idea}</p>
+      <p class="location">${idea.location}</p>
+      </li>`
+  }else{
+    //add to screen
+    li = `<li class="idea" data-id="${idea.id}">
+      <label for="chk-uniqueid">
+      <input type="checkbox" id="chk-uniqueid" /> Bought</label>
+      <p class="title">${idea.idea}</p>
+      <p class="location">${idea.location}</p>
+      </li>`
+    document.querySelector('ul.idea-list').innerHTML += li;
+  }
+
+  document.querySelectorAll('.person').forEach((person) => {
+        person.addEventListener('click', (ev) => {
+            selectPerson(ev)
+        })
+    });
 }
