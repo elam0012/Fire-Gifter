@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnAddPerson').addEventListener('click', showOverlay);
   document.getElementById('btnAddIdea').addEventListener('click', showOverlay);
   document.getElementById('btnSavePerson').addEventListener('click',savePerson)
+  document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
 });
 
 function hideOverlay(ev) {
@@ -187,4 +188,39 @@ function showPerson(person){
             selectPerson(ev)
         })
     });
+}
+
+async function saveIdea(ev){
+  ev.preventDefault();
+  let title = document.getElementById('title').value;
+  let location = document.getElementById('location').value;
+  if(!title || !location) return; //form needs more info 
+  let personId = document.querySelector(".selected").getAttribute("data-id")
+  const selectedPersonRef = doc(db, 'people', personId);
+  const idea = {
+    "idea": title,
+    location,
+    "person-id": selectedPersonRef
+  };
+  
+  try {
+    const docRef = await addDoc(collection(db, 'gift-ideas'), idea );
+    console.log('Document written with ID: ', docRef.id);
+    //0. add id to the idea object
+    idea.id = docRef.id
+    //1. clear the form fields 
+    document.getElementById('title').value = '';
+    document.getElementById('location').value = '';
+    //2. hide the dialog and the overlay
+    hideOverlay(ev);
+    //3. display a message to the user about success 
+    // tellUser(`Person ${name} added to database`);
+    // person.id = docRef.id;
+    //4. ADD the new HTML to the <ul> using the new object
+    // showIdea(idea);
+  } catch (err) {
+    console.error('Error adding document: ', err);
+    //do you want to stay on the dialog?
+    //display a mesage to the user about the problem
+  }
 }
