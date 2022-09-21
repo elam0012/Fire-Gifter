@@ -18,13 +18,22 @@ const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
   getPeople()
-  document.getElementById('btnCancelPerson').addEventListener('click', hideOverlay);
-  document.getElementById('btnCancelIdea').addEventListener('click', hideOverlay);
+  // document.getElementById('btnCancelPerson').addEventListener('click', hideOverlay);
+  // document.getElementById('btnCancelIdea').addEventListener('click', hideOverlay);
   // document.querySelector('.overlay').addEventListener('click', hideOverlay);
   document.getElementById('btnAddPerson').addEventListener('click', showOverlay);
+  document.getElementById('btnEditPerson').addEventListener('click', showOverlay);
+  document.getElementById('btnDeletePerson').addEventListener('click', showOverlay);
   document.getElementById('btnAddIdea').addEventListener('click', showOverlay);
+  document.getElementById('btnEditIdea').addEventListener('click', showOverlay);
+  document.getElementById('btnDeleteIdea').addEventListener('click', showOverlay);
   document.getElementById('btnSavePerson').addEventListener('click',savePerson)
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
+  document.querySelectorAll('.btnCancel').forEach((button) => {
+    button.addEventListener("click", (ev) => {
+      hideOverlay(ev)
+    })
+  })
 });
 
 function hideOverlay(ev) {
@@ -38,7 +47,40 @@ function hideOverlay(ev) {
 function showOverlay(ev) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.add('active');
-  const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
+  // const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
+  console.log(ev.target.id)
+  let id
+  switch (ev.target.id) {
+    case 'btnAddPerson':
+      id = 'dlgPerson'
+      break;
+
+    case 'btnEditPerson':
+      id = 'dlgPersonEdit'
+      break;
+
+    case 'btnDeletePerson':
+      id = 'dlgPersonDelete'
+      break;
+
+    case 'btnAddIdea':
+      id = 'dlgIdea'
+      break;
+
+    case 'btnEditIdea':
+      id = 'dlgIdeaEdit'
+      break;
+
+    case 'btnDeleteIdea':
+      id = 'dlgIdeaDelete'
+      break;
+
+    default:
+      console.log(`Button not exist`);
+}
+
+console.log(id)
+
   //TODO: check that person is selected before adding an idea
   document.getElementById(id).classList.add('active');
 }

@@ -88,10 +88,49 @@
           <input type="number" id="day" name="day" min="1" max="31" value="1" />
         </p>
         <p>
-          <button id="btnCancelPerson">Cancel</button>
+          <!-- <button id="btnCancelPerson">Cancel</button> -->
+          <button class="btnCancel">Cancel</button>
           <button id="btnSavePerson">Save</button>
         </p>
       </dialog>
+
+      <dialog id="dlgPersonEdit" class="">
+        <h2>Edit Person</h2>
+        <p>
+          <label for="id">ID:</label>
+          <input type="text" id="id" name="id" placeholder="person's ID" />
+        </p>
+        <p>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" placeholder="person's name" />
+        </p>
+        <p>
+          <label for="month">Birth Month:</label>
+          <input type="number" id="month" name="month" min="1" max="12" value="1" />
+        </p>
+        <p>
+          <label for="day">Birth Day:</label>
+          <input type="number" id="day" name="day" min="1" max="31" value="1" />
+        </p>
+        <p>
+          <!-- <button id="btnCancelPerson">Cancel</button> -->
+          <button class="btnCancel">Cancel</button>
+          <button id="btnEditPerson">Edit</button>
+        </p>
+      </dialog>
+
+      <dialog id="dlgPersonDelete" class="">
+        <h2>Delete Person</h2>
+        <p>
+          <label for="id">ID:</label>
+          <input type="text" id="id" name="id" placeholder="person's ID" />
+        </p>
+        <p>
+          <button class="btnCancel">Cancel</button>
+          <button id="btnDeletePerson">Delete</button>
+        </p>
+      </dialog>
+
 
       <!-- <dialog id="dlgIdea" class="active"> -->
       <dialog id="dlgIdea" class="">
@@ -115,8 +154,41 @@
           />
         </p>
         <p>
-          <button id="btnCancelIdea">Cancel</button>
+          <!-- <button id="btnCancelIdea">Cancel</button> -->
+          <button class="btnCancel">Cancel</button>
           <button id="btnSaveIdea">Save</button>
+        </p>
+      </dialog>
+
+      <dialog id="dlgIdeaEdit" class="">
+        <h2>Edit Gift Idea</h2>
+        <p>
+          <label for="id">ID:</label>
+          <input type="text" id="id" name="id" placeholder="Gift's ID" />
+        </p>
+        <p>
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" placeholder="describe the gift" />
+        </p>
+        <p>
+          <label for="location">Location:</label>
+          <input type="text" id="location" name="location" placeholder="store or website" />
+        </p>
+        <p>
+          <button class="btnCancel">Cancel</button>
+          <button id="btnEditIdea">Edit</button>
+        </p>
+      </dialog>
+
+      <dialog id="dlgIdeaDelete" class="">
+        <h2>Delete Gift Idea</h2>
+        <p>
+          <label for="id">ID:</label>
+          <input type="text" id="id" name="id" placeholder="Gift's ID" />
+        </p>
+        <p>
+          <button class="btnCancel">Cancel</button>
+          <button id="btnDeleteIdea">Delete</button>
         </p>
       </dialog>
       
