@@ -18,9 +18,8 @@ const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
   getPeople()
-  // document.querySelector('.overlay').addEventListener('click', hideOverlay);
-  document.getElementById('btnAddPerson').addEventListener('click', showOverlay);
-  document.getElementById('btnAddIdea').addEventListener('click', showOverlay);
+  document.querySelector('.btnAddPerson').addEventListener('click', showOverlay);
+  document.querySelector('.btnAddIdea').addEventListener('click', showOverlay);
   document.getElementById('btnSavePerson').addEventListener('click',savePerson);
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
   document.querySelectorAll('.btnCancel').forEach((button) => {
@@ -41,9 +40,6 @@ function hideOverlay(ev) {
 function showOverlay(ev) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.add('active');
-  const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
-
-  console.log(ev.target.classList.value)
 
   let button
   switch (ev.target.classList.value) {
@@ -73,12 +69,7 @@ function showOverlay(ev) {
 
     default:
       console.log(`Button not exist`);
-}
-
-console.log(document.getElementById(button))
-
-  //TODO: check that person is selected before adding an idea
-  document.getElementById(id).classList.add('active');
+  }
   document.getElementById(button).classList.add('active');
 }
 
