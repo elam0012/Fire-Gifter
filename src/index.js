@@ -41,43 +41,45 @@ function hideOverlay(ev) {
 function showOverlay(ev) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.add('active');
-  // const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
+  const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
 
-  let id
+  console.log(ev.target.classList.value)
+
+  let button
   switch (ev.target.classList.value) {
     case 'btnAddPerson':
-      id = 'dlgPerson'
+      button = 'dlgPerson'
       break;
 
     case 'btnEditPerson':
-      id = 'dlgPersonEdit'
+      button = 'dlgPersonEdit'
       break;
 
     case 'btnDeletePerson':
-      id = 'dlgPersonDelete'
+      button = 'dlgPersonDelete'
       break;
 
     case 'btnAddIdea':
-      id = 'dlgIdea'
+      button = 'dlgIdea'
       break;
 
     case 'btnEditIdea':
-      id = 'dlgIdeaEdit'
+      button = 'dlgIdeaEdit'
       break;
 
     case 'btnDeleteIdea':
-      id = 'dlgIdeaDelete'
+      button = 'dlgIdeaDelete'
       break;
 
     default:
       console.log(`Button not exist`);
 }
 
-console.log(id)
+console.log(document.getElementById(button))
 
   //TODO: check that person is selected before adding an idea
-  // document.getElementById(id).classList.add('active');
   document.getElementById(id).classList.add('active');
+  document.getElementById(button).classList.add('active');
 }
 
 const people = []; //to hold all the people from the collection
