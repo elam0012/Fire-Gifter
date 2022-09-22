@@ -212,6 +212,8 @@ function showPerson(person){
     li.outerHTML = `<li data-id="${person.id}" class="person">
             <p class="name">${person.name}</p>
             <p class="dob">${dob}</p>
+            <button class="btnEditPerson">Edit Person</button>
+            <button class="btnDeletePerson">Delete Person</button>
           </li>`;
   }else{
     //add to screen
@@ -220,15 +222,19 @@ function showPerson(person){
     li = `<li data-id="${person.id}" class="person">
             <p class="name">${person.name}</p>
             <p class="dob">${dob}</p>
+            <button class="btnEditPerson">Edit Person</button>
+            <button class="btnDeletePerson">Delete Person</button>
           </li>`;
     document.querySelector('ul.person-list').innerHTML += li;
   }
+
   document.querySelectorAll('.person').forEach((person) => {
     person.classList.remove("selected")
   });
   
   document.querySelector(`[data-id=${person.id}]`).classList.add('selected')
   getIdeas(person.id)
+
   document.querySelectorAll('.person').forEach((person) => {
         person.addEventListener('click', (ev) => {
             selectPerson(ev)
