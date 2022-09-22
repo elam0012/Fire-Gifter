@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDocs, query, where, addDoc} from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot} from 'firebase/firestore';
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const firebaseConfig = {
@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.btnAddPerson').addEventListener('click', showOverlay);
   document.querySelector('.btnAddIdea').addEventListener('click', showOverlay);
   document.getElementById('btnSavePerson').addEventListener('click',savePerson);
+  document.getElementById('btnDeletePerson').addEventListener('click',deletePerson);
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
   document.querySelectorAll('.btnCancel').forEach((button) => {
     button.addEventListener("click", (ev) => {
@@ -304,4 +305,9 @@ function showIdea(idea){
             selectPerson(ev)
         })
     });
+}
+
+function deletePerson (e) {
+  const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
+  deleteDoc(docRef)
 }
