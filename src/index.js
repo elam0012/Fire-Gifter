@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // document.getElementById('btnCancelIdea').addEventListener('click', hideOverlay);
   // document.querySelector('.overlay').addEventListener('click', hideOverlay);
   document.getElementById('btnAddPerson').addEventListener('click', showOverlay);
-  document.getElementById('btnEditPerson').addEventListener('click', showOverlay);
+  // document.getElementById('btnEditPerson').addEventListener('click', showOverlay);
   document.getElementById('btnDeletePerson').addEventListener('click', showOverlay);
   document.getElementById('btnAddIdea').addEventListener('click', showOverlay);
   document.getElementById('btnEditIdea').addEventListener('click', showOverlay);
   document.getElementById('btnDeleteIdea').addEventListener('click', showOverlay);
-  document.getElementById('btnSavePerson').addEventListener('click',savePerson)
+  document.getElementById('btnSavePerson').addEventListener('click',savePerson);
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
   document.querySelectorAll('.btnCancel').forEach((button) => {
     button.addEventListener("click", (ev) => {
@@ -47,39 +47,37 @@ function hideOverlay(ev) {
 function showOverlay(ev) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.add('active');
-  // const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
-  console.log(ev.target.id)
-  let id
-  switch (ev.target.id) {
-    case 'btnAddPerson':
-      id = 'dlgPerson'
-      break;
+  const id = ev.target.id === 'btnAddPerson' ? 'dlgPerson' : 'dlgIdea';
+//   console.log(ev.target.id)
+//   let id
+//   switch (ev.target.id) {
+//     case 'btnAddPerson':
+//       id = 'dlgPerson'
+//       break;
 
-    case 'btnEditPerson':
-      id = 'dlgPersonEdit'
-      break;
+//     case 'btnEditPerson':
+//       id = 'dlgPersonEdit'
+//       break;
 
-    case 'btnDeletePerson':
-      id = 'dlgPersonDelete'
-      break;
+//     case 'btnDeletePerson':
+//       id = 'dlgPersonDelete'
+//       break;
 
-    case 'btnAddIdea':
-      id = 'dlgIdea'
-      break;
+//     case 'btnAddIdea':
+//       id = 'dlgIdea'
+//       break;
 
-    case 'btnEditIdea':
-      id = 'dlgIdeaEdit'
-      break;
+//     case 'btnEditIdea':
+//       id = 'dlgIdeaEdit'
+//       break;
 
-    case 'btnDeleteIdea':
-      id = 'dlgIdeaDelete'
-      break;
+//     case 'btnDeleteIdea':
+//       id = 'dlgIdeaDelete'
+//       break;
 
-    default:
-      console.log(`Button not exist`);
-}
-
-console.log(id)
+//     default:
+//       console.log(`Button not exist`);
+// }
 
   //TODO: check that person is selected before adding an idea
   document.getElementById(id).classList.add('active');
@@ -133,8 +131,16 @@ function buildPeople(people){
     return `<li data-id="${person.id}" class="person">
             <p class="name">${person.name}</p>
             <p class="dob">${dob}</p>
+            <button class="btnEditPerson">Edit Person</button>
+            <button class="btnDeletePerson">Delete Person</button>
           </li>`;
   }).join('');
+  document.querySelectorAll('.btnEditPerson').forEach((button) => {
+    button.addEventListener('click', showOverlay);
+  })
+  document.querySelectorAll('.btnDeletePerson').forEach((button) => {
+    button.addEventListener('click', showOverlay);
+  })
 }
 
 function buildGifts(gifts){
@@ -149,8 +155,16 @@ function buildGifts(gifts){
       >
       <p class="title">${gift.idea}</p>
       <p class="location">${gift.location}</p>
+      <button class="btnEditIdea">Edit Idea</button>
+      <button class="btnDeleteIdea">Delete Idea</button>
       </li>`
     }).join('');
+    document.querySelectorAll('.btnEditIdea').forEach((button) => {
+    button.addEventListener('click', showOverlay);
+  })
+  document.querySelectorAll('.btnDeleteIdea').forEach((button) => {
+    button.addEventListener('click', showOverlay);
+  })
   } else ul.innerHTML = `<h3 class="no-idea">There are no ideas added! click on "Add Idea" button to add one</h3>`
 }
 
