@@ -146,9 +146,21 @@ function buildGifts(gifts){
   //replace the old ul contents with the new.
   if (gifts.length != 0) {
     ul.innerHTML = gifts.map(gift => {
+      const ideaRef = doc(db, 'gift-ideas', gift.id)
+      let checked = getDoc(ideaRef).then((doc) => {
+        let checked
+        console.log(doc.data().bought)
+        if (doc.data().bought) {
+          checked = "checked"
+        } else {
+          checked = ""
+        }
+        return checked
+      })
+      console.log(checked)
       return `<li class="idea" data-id="${gift.id}">
       <label for="chk-uniqueid">
-      <input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" /> Bought</label>
+      <input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" ${checked}/> Bought</label>
       <p class="title">${gift.idea}</p>
       <p class="location">${gift.location}</p>
       <button class="btnEditIdea">Edit Idea</button>
@@ -166,13 +178,13 @@ function buildGifts(gifts){
 
 let checkboxes = document.querySelectorAll(".chk-uniqueid");
 checkboxes.forEach(checkbox => {
-  const personRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
   checkbox.addEventListener('change', function () {
     const ideaRef = doc(db, 'gift-ideas', this.getAttribute("data-id"))
-    let boughtBox
     updateDoc(ideaRef, {
     "bought": this.checked
     })
+
+  
     // onSnapshot(ideaRef, (doc) => {
     //   // let boughtBox = doc.data().bought
     //   console.log(doc.data().bought = true)
