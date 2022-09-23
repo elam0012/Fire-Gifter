@@ -118,11 +118,12 @@ async function getIdeas(id){
   buildGifts(gifts);
 }
 
-function buildPeople(people){
+function buildPeople(people){ // this called many times need to find how to make it once
   //build the HTML
   let ul = document.querySelector('ul.person-list');
   //replace the old ul contents with the new.
   ul.innerHTML = people.map(person=>{
+    console.log("build people called")
     const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
     //Use the number of the birth-month less 1 as the index for the months array
     return `<li data-id="${person.id}" class="person">
@@ -147,20 +148,10 @@ function buildGifts(gifts){
   if (gifts.length != 0) {
     ul.innerHTML = gifts.map(gift => {
       const ideaRef = doc(db, 'gift-ideas', gift.id)
-      let checked = getDoc(ideaRef).then((doc) => {
-        let checked
-        console.log(doc.data().bought)
-        if (doc.data().bought) {
-          checked = "checked"
-        } else {
-          checked = ""
-        }
-        return checked
-      })
-      console.log(checked)
+      
       return `<li class="idea" data-id="${gift.id}">
       <label for="chk-uniqueid">
-      <input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" ${checked}/> Bought</label>
+      <input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" ${gift.bought==true?'checked':''}/> Bought</label>
       <p class="title">${gift.idea}</p>
       <p class="location">${gift.location}</p>
       <button class="btnEditIdea">Edit Idea</button>
@@ -183,37 +174,6 @@ checkboxes.forEach(checkbox => {
     updateDoc(ideaRef, {
     "bought": this.checked
     })
-
-  
-    // onSnapshot(ideaRef, (doc) => {
-    //   // let boughtBox = doc.data().bought
-    //   console.log(doc.data().bought = true)
-    //   // boughtBox = this.checked
-    //   // console.log(boughtBox)
-
-    //   // console.log(doc.data().bought = true)
-
-    //   // boughtBox = !boughtBox
-
-    //   // console.log(boughtBox)
-
-    //   // if(boughtBox) {
-    //   //   this.checked = true
-    //   // } else {
-    //   //   this.checked = false
-    //   // } 
-
-    //   if (this.checked) {
-    //     console.log("Checkbox is checked..");
-    //     boughtBox = true
-    //     console.log(boughtBox)
-        
-    //   } else {
-    //     console.log("Checkbox is not checked..");
-    //     boughtBox = false
-    //     console.log(boughtBox)
-    //   }
-    // })
   });
 })
 
