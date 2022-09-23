@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc} from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc, getDoc} from 'firebase/firestore';
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const firebaseConfig = {
@@ -147,9 +147,8 @@ function buildGifts(gifts){
   if (gifts.length != 0) {
     ul.innerHTML = gifts.map(gift => {
       return `<li class="idea" data-id="${gift.id}">
-      <label for="chk-uniqueid"
-      ><input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" /> Bought</label
-      >
+      <label for="chk-uniqueid">
+      <input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" /> Bought</label>
       <p class="title">${gift.idea}</p>
       <p class="location">${gift.location}</p>
       <button class="btnEditIdea">Edit Idea</button>
@@ -169,13 +168,40 @@ let checkboxes = document.querySelectorAll(".chk-uniqueid");
 checkboxes.forEach(checkbox => {
   const personRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
   checkbox.addEventListener('change', function () {
-    if (this.checked) {
-      const ideaRef = doc(db, 'gift-ideas', this.getAttribute("data-id"))
-      console.log("Checkbox is checked..");
-      console.log(personRef.id, ideaRef.id);
-    } else {
-      console.log("Checkbox is not checked..");
-    }
+    const ideaRef = doc(db, 'gift-ideas', this.getAttribute("data-id"))
+    let boughtBox
+    updateDoc(ideaRef, {
+    "bought": this.checked
+    })
+    // onSnapshot(ideaRef, (doc) => {
+    //   // let boughtBox = doc.data().bought
+    //   console.log(doc.data().bought = true)
+    //   // boughtBox = this.checked
+    //   // console.log(boughtBox)
+
+    //   // console.log(doc.data().bought = true)
+
+    //   // boughtBox = !boughtBox
+
+    //   // console.log(boughtBox)
+
+    //   // if(boughtBox) {
+    //   //   this.checked = true
+    //   // } else {
+    //   //   this.checked = false
+    //   // } 
+
+    //   if (this.checked) {
+    //     console.log("Checkbox is checked..");
+    //     boughtBox = true
+    //     console.log(boughtBox)
+        
+    //   } else {
+    //     console.log("Checkbox is not checked..");
+    //     boughtBox = false
+    //     console.log(boughtBox)
+    //   }
+    // })
   });
 })
 
