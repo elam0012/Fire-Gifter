@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function hideOverlay(ev) {
+
   ev.preventDefault();
   document.querySelector('.overlay').classList.remove('active');
   document
@@ -307,7 +308,9 @@ function showIdea(idea){
     });
 }
 
-function deletePerson (e) {
+function deletePerson (ev) {
   const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
   deleteDoc(docRef)
+  hideOverlay(ev)
+  // showPerson()
 }
