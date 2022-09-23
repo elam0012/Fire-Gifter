@@ -314,3 +314,10 @@ function deletePerson (ev) {
   hideOverlay(ev)
   // showPerson()
 }
+
+// listener for changes in people collection
+const peopleColRef = collection(db, 'people');
+onSnapshot(peopleColRef, (querySnapshot) => { // will run once initially and each time there is a change in data in the collection*
+  let people = [];
+  buildPeople(people);
+})
