@@ -148,7 +148,7 @@ function buildGifts(gifts){
     ul.innerHTML = gifts.map(gift => {
       return `<li class="idea" data-id="${gift.id}">
       <label for="chk-uniqueid"
-      ><input type="checkbox" id="chk-uniqueid" /> Bought</label
+      ><input type="checkbox" class="chk-uniqueid" data-id="${gift.id}" /> Bought</label
       >
       <p class="title">${gift.idea}</p>
       <p class="location">${gift.location}</p>
@@ -156,13 +156,30 @@ function buildGifts(gifts){
       <button class="btnDeleteIdea">Delete Idea</button>
       </li>`
     }).join('');
-    document.querySelectorAll('.btnEditIdea').forEach((button) => {
-    button.addEventListener('click', showOverlay);
+
+  document.querySelectorAll('.btnEditIdea').forEach((button) => {
+  button.addEventListener('click', showOverlay);
   })
+
   document.querySelectorAll('.btnDeleteIdea').forEach((button) => {
-    button.addEventListener('click', showOverlay);
+  button.addEventListener('click', showOverlay);
   })
-  } else ul.innerHTML = `<h3 class="no-idea">There are no ideas added! click on "Add Idea" button to add one</h3>`
+
+let checkboxes = document.querySelectorAll(".chk-uniqueid");
+checkboxes.forEach(checkbox => {
+  const personRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
+  checkbox.addEventListener('change', function () {
+    if (this.checked) {
+      const ideaRef = doc(db, 'gift-ideas', this.getAttribute("data-id"))
+      console.log("Checkbox is checked..");
+      console.log(personRef.id, ideaRef.id);
+    } else {
+      console.log("Checkbox is not checked..");
+    }
+  });
+})
+
+} else ul.innerHTML = `<h3 class="no-idea">There are no ideas added! click on "Add Idea" button to add one</h3>`
 }
 
 function selectPerson (ev) {
@@ -259,7 +276,8 @@ async function saveIdea(ev){
   const idea = {
     "idea": title,
     location,
-    "person-id": selectedPersonRef
+    "person-id": selectedPersonRef,
+    "bought": false
   };
   
   try {
@@ -290,7 +308,7 @@ function showIdea(idea){
   if(li){
     li.outerHTML = `<li class="idea" data-id="${idea.id}">
       <label for="chk-uniqueid">
-      <input type="checkbox" id="chk-uniqueid" /> Bought</label>
+      <input type="checkbox" class="chk-uniqueid" /> Bought</label>
       <p class="title">${idea.idea}</p>
       <p class="location">${idea.location}</p>
       </li>`
@@ -299,7 +317,7 @@ function showIdea(idea){
     document.querySelector(".no-idea").classList.add("hide")
     li = `<li class="idea" data-id="${idea.id}">
       <label for="chk-uniqueid">
-      <input type="checkbox" id="chk-uniqueid" /> Bought</label>
+      <input type="checkbox" class="chk-uniqueid" /> Bought</label>
       <p class="title">${idea.idea}</p>
       <p class="location">${idea.location}</p>
       </li>`
