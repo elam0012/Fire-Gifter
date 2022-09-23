@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot} from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc} from 'firebase/firestore';
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const firebaseConfig = {
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.btnAddIdea').addEventListener('click', showOverlay);
   document.getElementById('btnSavePerson').addEventListener('click',savePerson);
   document.getElementById('btnDeletePerson').addEventListener('click',deletePerson);
+  document.getElementById('btnEditPerson').addEventListener('click',editPerson);
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
   document.querySelectorAll('.btnCancel').forEach((button) => {
     button.addEventListener("click", (ev) => {
@@ -317,5 +318,22 @@ function deletePerson (ev) {
   deleteDoc(docRef)
   hideOverlay(ev)
   // showPerson()
+}
+
+function editPerson (ev) {
+  // ev.preventDefault();
+  const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
+  console.log(document.getElementById('editName').value, document.getElementById('editMonth').value, document.getElementById('editDay').value )
+  updateDoc(docRef, {
+    'name': document.getElementById('editName').value,
+    'birth-month': document.getElementById('editMonth').value,
+    'birth-day': document.getElementById('editDay').value
+  })
+  .then(() => {
+    document.getElementById('editName').value = '';
+    document.getElementById('editMonth').value = '';
+    document.getElementById('editDay').value = '';
+    hideOverlay(ev)
+  })
 }
 
