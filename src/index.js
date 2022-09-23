@@ -75,15 +75,18 @@ function showOverlay(ev) {
   document.getElementById(button).classList.add('active');
 }
 
-const people = []; //to hold all the people from the collection
 
-async function getPeople(){
-  const querySnapshot = await getDocs(collection(db, 'people'));
+function getPeople(){
+
+  const peopleColRef = collection(db, 'people');
+  onSnapshot(peopleColRef, (querySnapshot) => { // will run once initially and each time there is a change in data in the collection*
+  let people = [];
   querySnapshot.forEach((doc) => {
     const data = doc.data(); // to hold all teh document data not including the id
     const id = doc.id; //every `doc` object has a `id` property that holds the `_id` value from Firestore.
     people.push({id, ...data});
   });
+
   buildPeople(people);
   document.querySelector('.person').classList.add('selected')
   getIdeas(people[0].id)
@@ -92,6 +95,7 @@ async function getPeople(){
             selectPerson(ev)
         })
     });
+  })
 }
 
 async function getIdeas(id){
@@ -315,9 +319,3 @@ function deletePerson (ev) {
   // showPerson()
 }
 
-// listener for changes in people collection
-const peopleColRef = collection(db, 'people');
-onSnapshot(peopleColRef, (querySnapshot) => { // will run once initially and each time there is a change in data in the collection*
-  let people = [];
-  buildPeople(people);
-})
