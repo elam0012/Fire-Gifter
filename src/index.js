@@ -165,15 +165,19 @@ function buildGifts(gifts){
     }).join('');
 
   document.querySelectorAll('.btnEditIdea').forEach((button) => {
-  button.addEventListener('click', showOverlay);
+  // button.addEventListener('click', showOverlay);
+    button.addEventListener('click', (ev) => {
+      giftId = (ev.path[1].dataset.id)
+      showOverlay(ev, giftId)
+    });
   })
 
   document.querySelectorAll('.btnDeleteIdea').forEach((button) => {
   // button.addEventListener('click', showOverlay);
-  button.addEventListener('click', (ev) => {
-    giftId = (ev.path[1].dataset.id)
-    showOverlay(ev, giftId)
-  });
+    button.addEventListener('click', (ev) => {
+      giftId = (ev.path[1].dataset.id)
+      showOverlay(ev, giftId)
+    });
   })
 
 let checkboxes = document.querySelectorAll(".chk-uniqueid");
@@ -298,10 +302,9 @@ function deleteIdea (ev) {
 }
 
 function editIdea (ev) {
-  // ev.preventDefault();
 
-  console.log("edit confirmed")
 
+  console.log(giftId)
   // const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
   // updateDoc(docRef, {
   //   'name': document.getElementById('editName').value,
@@ -314,5 +317,6 @@ function editIdea (ev) {
   //   document.getElementById('editDay').value = '';
   //   hideOverlay(ev)
   // })
+
 }
 
