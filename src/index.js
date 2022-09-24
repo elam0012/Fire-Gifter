@@ -221,7 +221,7 @@ async function savePerson(ev){
     // tellUser(`Person ${name} added to database`);
     // person.id = docRef.id;
     //4. ADD the new HTML to the <ul> using the new object
-    showPerson(person);
+    // showPerson(person);
   } catch (err) {
     console.error('Error adding document: ', err);
     //do you want to stay on the dialog?
