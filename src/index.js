@@ -191,9 +191,7 @@ async function savePerson(ev){
     document.getElementById('month').value = '';
     document.getElementById('day').value = '';
     hideOverlay(ev);//2. hide the dialog and the overlay
-    //3. display a message to the user about success 
-    // tellUser(`Person ${name} added to database`);
-    // person.id = docRef.id;
+    tellUser(`${name} added to database`);// 3. display a message to the user about success 
   } catch (err) {
     console.error('Error adding document: ', err);
   }
@@ -219,9 +217,7 @@ async function saveIdea(ev){
     document.getElementById('title').value = ''; //1. clear the form fields 
     document.getElementById('location').value = '';
     hideOverlay(ev);  //2. hide the dialog and the overlay
-    //3. display a message to the user about success 
-    // tellUser(`Person ${name} added to database`);
-    // person.id = docRef.id;
+    tellUser(`${title} added to database`);// 3. display a message to the user about success 
   } catch (err) {
     console.error('Error adding document: ', err);
   }
@@ -263,4 +259,14 @@ function editIdea (ev) {
     document.getElementById('editLocation').value = '';
     hideOverlay(ev);
   })
+}
+
+function tellUser(msg) {
+  let alert = document.createElement("div");
+  alert.classList.add("message")
+  alert.innerHTML = msg;
+  setTimeout(() => {
+    alert.parentNode.removeChild(alert);
+  },2000);
+  document.body.appendChild(alert);
 }

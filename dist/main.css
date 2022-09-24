@@ -212,3 +212,11 @@ dialog button {
 .hide{
   display: none;
 }
+
+.message {
+  position:absolute;
+  top:5%;left:60%;
+  background-color:rgba(0, 0, 0, 0.422);
+  color:white;
+  padding: 1rem;
+}
