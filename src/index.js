@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnSavePerson').addEventListener('click',savePerson);
   document.getElementById('btnConfirmDeletePerson').addEventListener('click',deletePerson);
   document.getElementById('btnConfirmDeleteIdea').addEventListener('click',deleteIdea);
-  document.getElementById('btnEditPerson').addEventListener('click',editPerson);
+  document.getElementById('btnConfirmEditPerson').addEventListener('click',editPerson);
+  document.getElementById('btnConfirmEditIdea').addEventListener('click',editIdea);
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
   document.querySelectorAll('.btnCancel').forEach((button) => {
     button.addEventListener("click", (ev) => {
@@ -128,7 +129,6 @@ function buildPeople(people){
   let ul = document.querySelector('ul.person-list');
   //replace the old ul contents with the new.
   ul.innerHTML = people.map(person=>{
-    console.log("build people called")
     const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
     //Use the number of the birth-month less 1 as the index for the months array
     return `<li data-id="${person.id}" class="person">
@@ -278,7 +278,6 @@ function deletePerson (ev) {
 function editPerson (ev) {
   // ev.preventDefault();
   const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
-  console.log(document.getElementById('editName').value, document.getElementById('editMonth').value, document.getElementById('editDay').value )
   updateDoc(docRef, {
     'name': document.getElementById('editName').value,
     'birth-month': document.getElementById('editMonth').value,
@@ -296,5 +295,24 @@ function deleteIdea (ev) {
   const docRef = doc(db, 'gift-ideas', giftId)
   deleteDoc(docRef)
   hideOverlay(ev)
+}
+
+function editIdea (ev) {
+  // ev.preventDefault();
+
+  console.log("edit confirmed")
+
+  // const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
+  // updateDoc(docRef, {
+  //   'name': document.getElementById('editName').value,
+  //   'birth-month': document.getElementById('editMonth').value,
+  //   'birth-day': document.getElementById('editDay').value
+  // })
+  // .then(() => {
+  //   document.getElementById('editName').value = '';
+  //   document.getElementById('editMonth').value = '';
+  //   document.getElementById('editDay').value = '';
+  //   hideOverlay(ev)
+  // })
 }
 
