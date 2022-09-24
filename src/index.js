@@ -126,7 +126,6 @@ function buildPeople(people){
 }
 
 function buildGifts(gifts){
- 
   let ul = document.querySelector('ul.idea-list');  //build the HTML
   if (gifts.length != 0) {   //replace the old ul contents with the new.
     ul.innerHTML = gifts.map(gift => {
