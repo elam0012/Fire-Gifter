@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc, getDoc} from 'firebase/firestore';
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+let giftId
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuzvlK2q939LGuhDXP2cLyxDqW81uQE9M",
@@ -21,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.btnAddPerson').addEventListener('click', showOverlay);
   document.querySelector('.btnAddIdea').addEventListener('click', showOverlay);
   document.getElementById('btnSavePerson').addEventListener('click',savePerson);
-  document.getElementById('btnDeletePerson').addEventListener('click',deletePerson);
+  document.getElementById('btnConfirmDeletePerson').addEventListener('click',deletePerson);
+  document.getElementById('btnConfirmDeleteIdea').addEventListener('click',deleteIdea);
   document.getElementById('btnEditPerson').addEventListener('click',editPerson);
   document.getElementById('btnSaveIdea').addEventListener('click',saveIdea)
   document.querySelectorAll('.btnCancel').forEach((button) => {
@@ -40,7 +42,7 @@ function hideOverlay(ev) {
   .forEach((dialog) => dialog.classList.remove('active'));
 }
 
-function showOverlay(ev) {
+function showOverlay(ev, giftId) {
   ev.preventDefault();
   document.querySelector('.overlay').classList.add('active');
 
@@ -155,7 +157,7 @@ function buildGifts(gifts){
       <p class="title">${gift.idea}</p>
       <p class="location">${gift.location}</p>
       <button class="btnEditIdea">Edit Idea</button>
-      <button class="btnDeleteIdea">Delete Idea</button>
+      <button class="btnDeleteIdea" >Delete Idea</button>
       </li>`
     }).join('');
 
@@ -164,7 +166,11 @@ function buildGifts(gifts){
   })
 
   document.querySelectorAll('.btnDeleteIdea').forEach((button) => {
-  button.addEventListener('click', showOverlay);
+  // button.addEventListener('click', showOverlay);
+  button.addEventListener('click', (ev) => {
+    giftId = (ev.path[1].dataset.id)
+    showOverlay(ev, giftId)
+  });
   })
 
 let checkboxes = document.querySelectorAll(".chk-uniqueid");
@@ -351,5 +357,11 @@ function editPerson (ev) {
     document.getElementById('editDay').value = '';
     hideOverlay(ev)
   })
+}
+
+function deleteIdea (ev) {
+  const docRef = doc(db, 'gift-ideas', giftId)
+  deleteDoc(docRef)
+  hideOverlay(ev)
 }
 
