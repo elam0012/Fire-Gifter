@@ -101,26 +101,29 @@ function getPeople(){
   })
 }
 
-async function getIdeas(id){
-  const gifts = []; //to hold all the gifts from the collection and to clear teh previous gifts
+function getIdeas(id){
+
   //get an actual reference to the person document 
   const personRef = doc(db, 'people', id);
   //then run a query where the `person-id` property matches the reference for the person
   const docs = query(
     collection(db, 'gift-ideas'),
     where('person-id', '==', personRef)
-  );
-  const querySnapshot = await getDocs(docs);
+    );
+    
+  onSnapshot(docs, (querySnapshot) => {
+    const gifts = []; //to hold all the gifts from the collection and to clear teh previous gifts
+    querySnapshot.forEach((doc) => { 
+      const data = doc.data();
+      const id = doc.id;
+      gifts.push({id, ...data});
+    });
+    buildGifts(gifts);
+  })
 
-  querySnapshot.forEach((doc) => { 
-    const data = doc.data();
-    const id = doc.id;
-    gifts.push({id, ...data});
-  });
-  buildGifts(gifts);
 }
 
-function buildPeople(people){ // this called many times need to find how to make it once
+function buildPeople(people){ 
   //build the HTML
   let ul = document.querySelector('ul.person-list');
   //replace the old ul contents with the new.
@@ -229,47 +232,6 @@ async function savePerson(ev){
   }
 }
 
-function showPerson(person){
-  let li = document.getElementById(person.id);
-  // let li = document.querySelector(`[data-id=${person.id}]`)
-  if(li){
-    //update on screen
-    const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
-    //Use the number of the birth-month less 1 as the index for the months array
-    //replace the existing li with this new HTML
-    li.outerHTML = `<li data-id="${person.id}" class="person">
-            <p class="name">${person.name}</p>
-            <p class="dob">${dob}</p>
-            <button class="btnEditPerson">Edit Person</button>
-            <button class="btnDeletePerson">Delete Person</button>
-          </li>`;
-  }else{
-    //add to screen
-    const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;
-    //Use the number of the birth-month less 1 as the index for the months array
-    li = `<li data-id="${person.id}" class="person">
-            <p class="name">${person.name}</p>
-            <p class="dob">${dob}</p>
-            <button class="btnEditPerson">Edit Person</button>
-            <button class="btnDeletePerson">Delete Person</button>
-          </li>`;
-    document.querySelector('ul.person-list').innerHTML += li;
-  }
-
-  document.querySelectorAll('.person').forEach((person) => {
-    person.classList.remove("selected")
-  });
-  
-  document.querySelector(`[data-id=${person.id}]`).classList.add('selected')
-  getIdeas(person.id)
-
-  document.querySelectorAll('.person').forEach((person) => {
-        person.addEventListener('click', (ev) => {
-            selectPerson(ev)
-        })
-    });
-}
-
 async function saveIdea(ev){
   ev.preventDefault();
   let title = document.getElementById('title').value;
@@ -298,41 +260,12 @@ async function saveIdea(ev){
     // tellUser(`Person ${name} added to database`);
     // person.id = docRef.id;
     //4. ADD the new HTML to the <ul> using the new object
-    showIdea(idea);
+    // showIdea(idea);
   } catch (err) {
     console.error('Error adding document: ', err);
     //do you want to stay on the dialog?
     //display a mesage to the user about the problem
   }
-}
-
-function showIdea(idea){
-  let li = document.getElementById(idea.id);
-  // let li = document.querySelector(`[data-id=${person.id}]`)
-  if(li){
-    li.outerHTML = `<li class="idea" data-id="${idea.id}">
-      <label for="chk-uniqueid">
-      <input type="checkbox" class="chk-uniqueid" /> Bought</label>
-      <p class="title">${idea.idea}</p>
-      <p class="location">${idea.location}</p>
-      </li>`
-  }else{
-    //add to screen
-    document.querySelector(".no-idea").classList.add("hide")
-    li = `<li class="idea" data-id="${idea.id}">
-      <label for="chk-uniqueid">
-      <input type="checkbox" class="chk-uniqueid" /> Bought</label>
-      <p class="title">${idea.idea}</p>
-      <p class="location">${idea.location}</p>
-      </li>`
-    document.querySelector('ul.idea-list').innerHTML += li;
-  }
-
-  document.querySelectorAll('.person').forEach((person) => {
-        person.addEventListener('click', (ev) => {
-            selectPerson(ev)
-        })
-    });
 }
 
 function deletePerson (ev) {
