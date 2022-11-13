@@ -82,11 +82,11 @@ function getPeople(){
       buildPeople(people);
       document.querySelector('.person').classList.add('selected')
       getIdeas(people[0].id)
-      document.querySelectorAll('.person').forEach((person) => {
-            person.addEventListener('click', (ev) => {
-                selectPerson(ev)
-            })
-        });
+      document.querySelector(".person-list").addEventListener("click", (ev) => {
+        selectPerson(ev)
+      });
+
+
       }
   })
 }
@@ -113,8 +113,8 @@ function buildPeople(people){
   ul.innerHTML = people.map(person=>{ //replace the old ul contents with the new.
     const dob = `${months[person['birth-month']-1]} ${person['birth-day']}`;//Use the number of the birth-month less 1 as the index for the months array
     return `<li data-id="${person.id}" class="person">
-            <p class="name">${person.name}</p>
-            <p class="dob">${dob}</p>
+            <p class="name" >${person.name}</p>
+            <p class="dob" >${dob}</p>
             <button class="btnEditPerson">Edit Person</button>
             <button class="btnDeletePerson">Delete Person</button>
           </li>`;
@@ -166,11 +166,13 @@ function buildGifts(gifts){
 }
 
 function selectPerson (ev) {
-  ev.path[1].classList.add("selected")
-  document.querySelectorAll('.person').forEach((person) => {
-    if (person != ev.path[1]) person.classList.remove("selected")
-  });
-  getIdeas(ev.path[1].dataset.id)
+  if (ev.path[1].dataset.id) {
+    ev.path[1].classList.add("selected")
+    document.querySelectorAll('.person').forEach((person) => {
+      if (person != ev.path[1]) person.classList.remove("selected")
+    });
+    getIdeas(ev.path[1].dataset.id)
+  }
 }
 
 async function savePerson(ev){
