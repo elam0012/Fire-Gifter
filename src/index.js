@@ -79,7 +79,7 @@ function getPeople(){
   onSnapshot(peopleColRef, (querySnapshot) => { // will run once initially and each time there is a change in data in the collection*
     let people = [];
     querySnapshot.forEach((doc) => {
-      const data = doc.data(); // to hold all teh document data not including the id
+      const data = doc.data(); // to hold all the document data not including the id
       const id = doc.id; //every `doc` object has a `id` property that holds the `_id` value from Firestore.
       people.push({id, ...data});
     });
@@ -90,7 +90,7 @@ function getPeople(){
         document.querySelector(".person-list").addEventListener("click", (ev) => {
           selectPerson(ev)
         });
-      }
+      } else buildPeople(people) // this is to refresh the page once the last person get deleted
   })
 }
 
@@ -231,7 +231,17 @@ async function saveIdea(ev){
 
 function deletePerson (ev) {
   const docRef = doc(db, 'people', document.querySelector(".selected").getAttribute("data-id"))
-  deleteDoc(docRef)
+  const docs = query( //to select all gifts related to the person to be deleted
+    collection(db, 'gift-ideas'),
+    where('person-id', '==', docRef)
+  );
+  onSnapshot(docs, (querySnapshot) => {
+    querySnapshot.forEach((file) => {
+      const docRef = doc(db, 'gift-ideas', file.id)
+      deleteDoc(docRef) // delete all gifts
+    });
+  })
+  deleteDoc(docRef) // delete person
   hideOverlay(ev)
 }
 
