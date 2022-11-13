@@ -50,6 +50,9 @@ function showOverlay(ev, giftId) {
       break;
     case 'btnEditPerson':
       button = 'dlgPersonEdit'
+      document.getElementById('editName').value = ev.path[1].firstElementChild.innerHTML
+      document.getElementById('editMonth').value = months.indexOf(ev.path[1].childNodes[3].innerHTML.split(" ")[0])+1
+      document.getElementById('editDay').value = ev.path[1].childNodes[3].innerHTML.split(" ")[1]
       break;
     case 'btnDeletePerson':
       button = 'dlgPersonDelete'
@@ -59,6 +62,8 @@ function showOverlay(ev, giftId) {
       break;
     case 'btnEditIdea':
       button = 'dlgIdeaEdit'
+      document.getElementById('editTitle').value = ev.path[1].childNodes[3].innerHTML
+      document.getElementById('editLocation').value = ev.path[1].childNodes[5].innerHTML
       break;
     case 'btnDeleteIdea':
       button = 'dlgIdeaDelete'
@@ -79,14 +84,12 @@ function getPeople(){
       people.push({id, ...data});
     });
     if (people.length != 0) {
-      buildPeople(people);
-      document.querySelector('.person').classList.add('selected')
-      getIdeas(people[0].id)
-      document.querySelector(".person-list").addEventListener("click", (ev) => {
-        selectPerson(ev)
-      });
-
-
+        buildPeople(people);
+        document.querySelector('.person').classList.add('selected')
+        getIdeas(people[0].id)
+        document.querySelector(".person-list").addEventListener("click", (ev) => {
+          selectPerson(ev)
+        });
       }
   })
 }
@@ -238,12 +241,8 @@ function editPerson (ev) {
     'name': document.getElementById('editName').value,
     'birth-month': document.getElementById('editMonth').value,
     'birth-day': document.getElementById('editDay').value
-  }).then(() => {
-    document.getElementById('editName').value = '';
-    document.getElementById('editMonth').value = '';
-    document.getElementById('editDay').value = '';
-    hideOverlay(ev)
   })
+  hideOverlay(ev)
 }
 
 function deleteIdea (ev) {
@@ -257,11 +256,8 @@ function editIdea (ev) {
   updateDoc(docRef, {
     "idea" : document.getElementById('editTitle').value,
     "location" : document.getElementById('editLocation').value
-  }).then(() => {
-    document.getElementById('editTitle').value = '';
-    document.getElementById('editLocation').value = '';
-    hideOverlay(ev);
   })
+  hideOverlay(ev);
 }
 
 function tellUser(msg) {
