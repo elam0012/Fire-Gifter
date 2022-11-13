@@ -72,20 +72,22 @@ function showOverlay(ev, giftId) {
 function getPeople(){
   const peopleColRef = collection(db, 'people');
   onSnapshot(peopleColRef, (querySnapshot) => { // will run once initially and each time there is a change in data in the collection*
-  let people = [];
-  querySnapshot.forEach((doc) => {
-    const data = doc.data(); // to hold all teh document data not including the id
-    const id = doc.id; //every `doc` object has a `id` property that holds the `_id` value from Firestore.
-    people.push({id, ...data});
-  });
-  buildPeople(people);
-  document.querySelector('.person').classList.add('selected')
-  getIdeas(people[0].id)
-  document.querySelectorAll('.person').forEach((person) => {
-        person.addEventListener('click', (ev) => {
-            selectPerson(ev)
-        })
+    let people = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data(); // to hold all teh document data not including the id
+      const id = doc.id; //every `doc` object has a `id` property that holds the `_id` value from Firestore.
+      people.push({id, ...data});
     });
+    if (people.length != 0) {
+      buildPeople(people);
+      document.querySelector('.person').classList.add('selected')
+      getIdeas(people[0].id)
+      document.querySelectorAll('.person').forEach((person) => {
+            person.addEventListener('click', (ev) => {
+                selectPerson(ev)
+            })
+        });
+      }
   })
 }
 
