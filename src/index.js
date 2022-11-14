@@ -1,9 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc, getDoc} from 'firebase/firestore';
-import { getAuth, signInWithPopup, GithubAuthProvider, setPersistence, browserSessionPersistence, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithPopup, GithubAuthProvider, setPersistence, browserSessionPersistence, signOut, onAuthStateChanged, signInWithCredential } from "firebase/auth";
 
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 let giftId // to pass gift-id to edit and delete functions
+const provider = new GithubAuthProvider(); // GitHub Authentication
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuzvlK2q939LGuhDXP2cLyxDqW81uQE9M",
@@ -286,80 +287,30 @@ function tellUser(msg) {
 
 /************************************ Authentication ******************************************/
 
-const provider = new GithubAuthProvider();
-
-// provider.setCustomParameters({
-//   'allow_signup': 'true', //let the user signup for a Github account through the interface 
-// });
-
-//choose one of the following two lines 
-const user = {}
 function attemptLogin(){
-  //try to login with the global auth and provider objects
   signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
-      // The signed-in user info.
-      user = result.user;
-      console.log(user)
-      
-      // ...
+      const user = result.user; // The signed-in user info.
+      if(user !== null){
+        document.getElementById("uid").innerHTML = user.displayName;
+        document.getElementById("img").src = user.photoURL
+      }
     }).catch((error) => {
-      // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
       // The email of the user's account used.
-      // const email = error.customData.email;
+      const email = error.customData.email;
       // The AuthCredential type that was used.
       const credential = GithubAuthProvider.credentialFromError(error);
     });
 }
 
-// const credential = GithubAuthProvider.credential(token);
-// signInWithCredential(auth, credential).then().catch();
-
-// function validateWithToken(token){
-//   const credential = GithubAuthProvider.credential(token);
-//   signInWithCredential(auth, credential)
-//     .then((result) => {
-//       //the token and credential were still valid 
-//     })
-//     .catch((error) => {
-//       // Handle Errors here.
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//     })
-// }
-
-// setPersistence(auth, browserSessionPersistence)
-//   .then(() => {
-//     // Existing and future Auth states are now persisted in the current
-//     // session only. Closing the window would clear any existing state even
-//     // if a user forgets to sign out.
-//     const provider = new GithubAuthProvider();
-//     // ...
-//     // New sign-in will be persisted with session persistence.
-//     signInWithPopup(auth, provider)
-//     .then(user=>{
-      
-//     })
-//     .catch(err=>{
-
-//     });  
-//     //return the call to your desired login method
-//   })
-//   .catch((error) => {
-//     // Handle Errors here.
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//   });
-
-
 function attemptLogOut(){
   signOut(auth)
     .then(() => {
-      console.log("user Signed Ourt")
+      console.log("user Signed Out")
       window.location.reload()
     })
     .catch ((err) =>{
@@ -371,11 +322,30 @@ onAuthStateChanged(auth, (user) => {
   if (user){
     document.querySelector('.btnAddPerson').classList.remove('hide')
     document.querySelector('.btnAddIdea').classList.remove('hide')
+    document.getElementById("img").classList.remove("hide")
     getPeople()
   } else {
     document.querySelector('.btnAddPerson').classList.add('hide')
     document.querySelector('.btnAddIdea').classList.add('hide')
+    document.getElementById("img").classList.add("hide")
   }
-  console.log("user stat change", user)
 })
+
+// setPersistence(auth, browserSessionPersistence)
+// .then(() => {
+//   signInWithCredential(auth, credential)
+//     .then((result) => {
+//       console.log("this is token-2", result)
+//       //the token and credential were still valid 
+//     })
+//     .catch((error) => {
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//     })
+//   //return the call to your desired login method
+// })
+// .catch((error) => {
+//   const errorCode = error.code;
+//   const errorMessage = error.message;
+// });
 
