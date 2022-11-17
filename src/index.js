@@ -331,21 +331,22 @@ onAuthStateChanged(auth, (user) => {
   }
 })
 
-// setPersistence(auth, browserSessionPersistence)
-// .then(() => {
-//   signInWithCredential(auth, credential)
-//     .then((result) => {
-//       console.log("this is token-2", result)
-//       //the token and credential were still valid 
-//     })
-//     .catch((error) => {
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//     })
-//   //return the call to your desired login method
-// })
-// .catch((error) => {
-//   const errorCode = error.code;
-//   const errorMessage = error.message;
-// });
+setPersistence(auth, browserSessionPersistence)
+.then(() => {
+  // signInWithCredential(auth, credential)
+  //   .then((result) => {
+  //     console.log("this is token-2", result)
+  //     //the token and credential were still valid 
+  //   })
+  //   .catch((error) => {
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //   })
+  //return the call to your desired login method
+  // return signInWithPopup(auth, provider)
+})
+.catch((error) => {
+  const errorCode = error.code;
+  const errorMessage = error.message;
+});
 
