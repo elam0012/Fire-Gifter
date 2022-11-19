@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc, getDoc} from 'firebase/firestore';
-import { getAuth, signInWithPopup, GithubAuthProvider, setPersistence, browserSessionPersistence, signOut, onAuthStateChanged, signInWithCredential } from "firebase/auth";
+import { getAuth, signInWithPopup, GithubAuthProvider, signOut, onAuthStateChanged, signInWithCredential } from "firebase/auth";
 
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 let giftId // to pass gift-id to edit and delete functions
@@ -18,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig); // Initialize Firebase
 const db = getFirestore(app);// get a reference to the database
 const auth = getAuth();
+let token = null
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.btnAddPerson').addEventListener('click', showOverlay);
@@ -35,6 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
       hideOverlay(ev)
     })
   })
+  token = sessionStorage.getItem("Fire-Gifter")
+  if (token) {
+    validateWithToken(token)
+  } 
 });
 
 function hideOverlay(ev) {
@@ -291,7 +296,8 @@ function attemptLogin(){
   signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GithubAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
+      token = credential.accessToken;
+      sessionStorage.setItem("Fire-Gifter", token)
       const user = result.user; // The signed-in user info.
       if(user !== null){
         document.getElementById("uid").innerHTML = user.displayName;
@@ -299,18 +305,12 @@ function attemptLogin(){
       }
     }).catch((error) => {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GithubAuthProvider.credentialFromError(error);
     });
 }
 
 function attemptLogOut(){
   signOut(auth)
     .then(() => {
-      console.log("user Signed Out")
       window.location.reload()
     })
     .catch ((err) =>{
@@ -331,22 +331,14 @@ onAuthStateChanged(auth, (user) => {
   }
 })
 
-setPersistence(auth, browserSessionPersistence)
-.then(() => {
-  // signInWithCredential(auth, credential)
-  //   .then((result) => {
-  //     console.log("this is token-2", result)
-  //     //the token and credential were still valid 
-  //   })
-  //   .catch((error) => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //   })
-  //return the call to your desired login method
-  // return signInWithPopup(auth, provider)
-})
-.catch((error) => {
-  const errorCode = error.code;
-  const errorMessage = error.message;
-});
+function validateWithToken(token){
+  const credential = GithubAuthProvider.credential(token);
+  signInWithCredential(auth, credential)
+    .then((result) => {
+      getPeople()
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+    })
+}
 
