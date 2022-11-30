@@ -298,6 +298,10 @@ function attemptLogin(){
       const credential = GithubAuthProvider.credentialFromResult(result);
       token = credential.accessToken;
       sessionStorage.setItem("Fire-Gifter", token)
+
+      document.getElementById("btnSignIn").classList.add("hide")
+      document.getElementById("btnSignOut").classList.remove("hide")
+      
       const user = result.user; // The signed-in user info.
       if(user !== null){
         document.getElementById("uid").innerHTML = user.displayName;
@@ -311,6 +315,8 @@ function attemptLogin(){
 function attemptLogOut(){
   signOut(auth)
     .then(() => {
+      document.getElementById("btnSignIn").classList.remove("hide")
+      document.getElementById("btnSignOut").classList.add("hide")
       window.location.reload()
     })
     .catch ((err) =>{
