@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc, getDoc} from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs, query, where, addDoc, deleteDoc, onSnapshot, updateDoc, getDoc, setDoc} from 'firebase/firestore';
 import { getAuth, signInWithPopup, GithubAuthProvider, signOut, onAuthStateChanged, signInWithCredential } from "firebase/auth";
 
 let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -85,7 +85,13 @@ function showOverlay(ev, giftId) {
 }
 
 function getPeople(){
+  const userRef = getUser();
   const peopleColRef = collection(db, 'people');
+  const docs = query( //then run a query where the `person-id` property matches the reference for the person
+    peopleColRef,
+    where('owner', '==', userRef)
+    );
+
   onSnapshot(peopleColRef, (querySnapshot) => { // will run once initially and each time there is a change in data in the collection*
     let people = [];
     querySnapshot.forEach((doc) => {
@@ -190,6 +196,7 @@ function selectPerson (ev) {
 
 async function savePerson(ev){
   ev.preventDefault();
+  const userRef = getUser();
   let name = document.getElementById('name').value;
   let month = document.getElementById('month').value;
   let day = document.getElementById('day').value;
@@ -197,7 +204,8 @@ async function savePerson(ev){
   const person = {
     name,
     'birth-month': month,
-    'birth-day': day
+    'birth-day': day,
+    'owner': userRef
   };
   try {
     const docRef = await addDoc(collection(db, 'people'), person );
@@ -290,6 +298,12 @@ function tellUser(msg) {
   document.body.appendChild(alert);
 }
 
+// get the user reference
+async function getUser() {
+  const ref = doc(db, "users", FirebaseAuth.instance.currentUser.uid);
+  return ref; //if you need to get the user reference
+}
+
 /************************************ Authentication ******************************************/
 
 function attemptLogin(){
@@ -307,6 +321,13 @@ function attemptLogin(){
         document.getElementById("uid").innerHTML = user.displayName;
         document.getElementById("img").src = user.photoURL
       }
+
+      //When calling doc(), if the document does not exist, it will be created
+      const usersColRef = collection(db, 'users');
+      setDoc(doc(usersColRef, user.uid), {
+        displayName: user.displayName
+      }, {merge:true}); // nothing will be written to the database if the user already exists and no changes to the data are present
+    
     }).catch((error) => {
       const errorCode = error.code;
     });
